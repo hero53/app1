@@ -32,42 +32,18 @@
 
 
 <script setup>
+
+//IMPORTATION 
 import { computed, ref } from "vue";
 import TodoHeader from './components/TodoHeader.vue';
 import TodoInput from './components/TodoInput.vue';
 import TodoItem from './components/TodoItem.vue';
-//state
-let todoList = ref([
-  {
-    "id": 1,
-    "task": "Faire les courses",
-    "is_done": false
-  },
-  {
-    "id": 2,
-    "task": "Répondre aux emails",
-    "is_done": true
-  },
-  {
-    "id": 3,
-    "task": "Faire du sport",
-    "is_done": false
-  },
-  {
-    "id": 4,
-    "task": "Lire un livre",
-    "is_done": true
-  },
-  {
-    "id": 5,
-    "task": "Travailler sur un projet",
-    "is_done": false
-  }
-]
-);
-// action 
+import TODOLIST from "./model/todolist";
 
+//states
+let todoList = ref(TODOLIST);
 
+// action
 const handleToggler = (id) => {
   let copyTask = [...todoList.value];
   let taskIndex = copyTask.findIndex(todo => todo.id === id);
@@ -93,4 +69,5 @@ const handleDelete = (id) => {
 const todoDone = computed(() => {
   return todoList.value.filter(todo => todo.is_done).length;
 });
+
 </script>
