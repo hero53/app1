@@ -1,28 +1,21 @@
 
 <style scoped></style>
-
 <template>
   <div id="top">
     <span id="up"></span>
     <h1>#App_1</h1>
-    <header>
-      <h1>Todo</h1>
-      <div id="todoStatus">
-        <div id="totalComp">
-          <span id="totalCompleted" class="countData">{{ todoDone }}</span><span class="countName">Complet</span>
-        </div>
-        <div id="totalNum">
-          <span id="totalTodos" class="countData">{{ todoList.length }}</span><span class="countName">Total</span>
-        </div>
-      </div>
-    </header>
+    <TodoHeader>
+      <template v-slot:completed>
+        {{ todoDone }}
+      </template>
+      <template v-slot:countName>
+        {{ todoList.length }}
+      </template>
+    </TodoHeader>
+
     <main>
-      <div id="todoInput">
-        <div class="listItem">
-          <input type="text" v-model="newTodo" placeholder="Input here and return to add..." @keydown.enter="addTodo"
-            @keydown.esc="removeTodo">
-        </div>
-      </div>
+     
+      <TodoInput v-model="newTodo" @addTodo="addTodo" @removeTodo="removeTodo"/>
       <div id="todoList" v-for="todo in todoList" :key="todo.id">
         <div class="listItem">
           <div :class="{ 'todoNameDone': todo.is_done, 'todoName': !todo.is_done }" @click="handleToggler(todo.id)">{{
@@ -38,6 +31,8 @@
 
 <script setup>
 import { computed, ref } from "vue";
+import TodoHeader from './components/TodoHeader.vue';
+import TodoInput from './components/TodoInput.vue';
 //state
 let todoList = ref([
   {
@@ -78,14 +73,28 @@ const handleToggler = (id) => {
   todoList.value = copyTask;
 };
 
-const addTodo = (e) => {
-  e.preventDefault()
+// const addTodo = (e) => {
+//   e.preventDefault()
+//   let copyTask = [...todoList.value];
+//   let newId = parseInt(todoList.value.length) + 1
+//   copyTask.push({ "id": newId, "task": newTodo.value, "is_done": false });
+//   todoList.value = copyTask;
+//   newTodo.value = ""
+//   console.log(copyTask);
+// }
+
+const addTodo = (data) => {
   let copyTask = [...todoList.value];
   let newId = parseInt(todoList.value.length) + 1
-  copyTask.push({ "id": newId, "task": newTodo.value, "is_done": false });
+  copyTask.push({ "id": newId, "task": data, "is_done": false });
   todoList.value = copyTask;
-  newTodo.value = ""
+  // newTodo.value = ""
   console.log(copyTask);
+}
+
+const removeTodo = (e) => {
+  e.preventDefault()
+  newTodo.value = ""
 }
 const handleDelete = (id) => {
   let newTodoList = todoList.value.filter(todo => todo.id !== id);
