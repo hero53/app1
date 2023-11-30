@@ -15,13 +15,15 @@
 
     <main>
      
-      <TodoInput v-model="newTodo" @addTodo="addTodo" @removeTodo="removeTodo"/>
+      <TodoInput  @addTodo="addTodo" @removeTodo="removeTodo"/>
+
       <div id="todoList" v-for="todo in todoList" :key="todo.id">
-        <div class="listItem">
+        <!-- <div class="listItem">
           <div :class="{ 'todoNameDone': todo.is_done, 'todoName': !todo.is_done }" @click="handleToggler(todo.id)">{{
             todo.task }}</div>
           <button type="button" @click="handleDelete(todo.id)">×</button>
-        </div>
+        </div> -->
+        <TodoItem :todo="todo" @handleToggler="handleToggler" @handleDelete="handleDelete"/>
       </div>
     </main>
   </div>
@@ -33,6 +35,7 @@
 import { computed, ref } from "vue";
 import TodoHeader from './components/TodoHeader.vue';
 import TodoInput from './components/TodoInput.vue';
+import TodoItem from './components/TodoItem.vue';
 //state
 let todoList = ref([
   {
@@ -62,7 +65,6 @@ let todoList = ref([
   }
 ]
 );
-const newTodo = ref('')
 // action 
 
 
@@ -73,29 +75,15 @@ const handleToggler = (id) => {
   todoList.value = copyTask;
 };
 
-// const addTodo = (e) => {
-//   e.preventDefault()
-//   let copyTask = [...todoList.value];
-//   let newId = parseInt(todoList.value.length) + 1
-//   copyTask.push({ "id": newId, "task": newTodo.value, "is_done": false });
-//   todoList.value = copyTask;
-//   newTodo.value = ""
-//   console.log(copyTask);
-// }
 
 const addTodo = (data) => {
   let copyTask = [...todoList.value];
   let newId = parseInt(todoList.value.length) + 1
   copyTask.push({ "id": newId, "task": data, "is_done": false });
   todoList.value = copyTask;
-  // newTodo.value = ""
-  console.log(copyTask);
 }
 
-const removeTodo = (e) => {
-  e.preventDefault()
-  newTodo.value = ""
-}
+
 const handleDelete = (id) => {
   let newTodoList = todoList.value.filter(todo => todo.id !== id);
   todoList.value = newTodoList;

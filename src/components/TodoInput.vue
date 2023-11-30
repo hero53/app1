@@ -20,7 +20,6 @@ const newTodo = ref('')
 const { addTodo } = defineProps([ 'addTodo']);
 const add = (e) => {
     e.preventDefault()
-    console.log(newTodo.value);
     emit("addTodo", newTodo.value);
     newTodo.value = ""
 }
